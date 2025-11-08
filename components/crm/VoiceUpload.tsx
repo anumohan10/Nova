@@ -112,9 +112,12 @@ export default function VoiceUpload() {
   return (
     <div className="max-w-7xl mx-auto p-6">
       <div className="mb-8">
-        <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-          🎤 Voice Note Auto-Population
-        </h2>
+        <div className="flex items-center gap-3 mb-2">
+          <span className="text-3xl">🎤</span>
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            Voice Note Auto-Population
+          </h2>
+        </div>
         <p className="text-gray-600">Upload a voice note and watch Nova transcribe & extract CRM data using AI</p>
       </div>
 

@@ -5,19 +5,20 @@ import LandingPage from '@/components/LandingPage';
 import EmailUpload from '@/components/crm/EmailUpload';
 import VoiceUpload from '@/components/crm/VoiceUpload';
 import AISearch from '@/components/crm/AISearch';
+import Dashboard from '@/components/crm/Dashboard';
 
-type Tab = 'email' | 'voice' | 'search';
+type Tab = 'dashboard' | 'email' | 'voice' | 'search';
 
 export default function Home() {
   const [showLanding, setShowLanding] = useState(true);
-  const [activeTab, setActiveTab] = useState<Tab>('email');
+  const [activeTab, setActiveTab] = useState<Tab>('dashboard');
 
   // Show landing page first
   if (showLanding) {
     return <LandingPage onEnter={() => setShowLanding(false)} />;
   }
 
-  // Show CRM platform after "Enter Nova"
+  // Show CRM platform after "Try Nova"
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-100">
       <div className="container mx-auto py-8 px-4">
@@ -34,44 +35,55 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Tab Navigation */}
-        <div className="max-w-4xl mx-auto mb-8">
-          <div className="bg-white rounded-xl shadow-lg p-2 flex gap-2">
+        {/* Tab Navigation - 4 Tabs */}
+        <div className="max-w-5xl mx-auto mb-8">
+          <div className="bg-white rounded-xl shadow-lg p-2 grid grid-cols-4 gap-2">
+            <button
+              onClick={() => setActiveTab('dashboard')}
+              className={`py-3 px-4 rounded-lg font-semibold transition-all ${
+                activeTab === 'dashboard'
+                  ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-md'
+                  : 'text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              📊 Insights
+            </button>
             <button
               onClick={() => setActiveTab('email')}
-              className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all ${
+              className={`py-3 px-4 rounded-lg font-semibold transition-all ${
                 activeTab === 'email'
                   ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-md'
                   : 'text-gray-600 hover:bg-gray-50'
               }`}
             >
-              📧 Email Auto-Population
+              📧 Email
             </button>
             <button
               onClick={() => setActiveTab('voice')}
-              className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all ${
+              className={`py-3 px-4 rounded-lg font-semibold transition-all ${
                 activeTab === 'voice'
                   ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-md'
                   : 'text-gray-600 hover:bg-gray-50'
               }`}
             >
-              🎤 Voice Notes
+              🎤 Voice
             </button>
             <button
               onClick={() => setActiveTab('search')}
-              className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all ${
+              className={`py-3 px-4 rounded-lg font-semibold transition-all ${
                 activeTab === 'search'
                   ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-md'
                   : 'text-gray-600 hover:bg-gray-50'
               }`}
             >
-              🔍 AI Search
+              🔍 Search
             </button>
           </div>
         </div>
 
         {/* Tab Content */}
         <div className="animate-fadeIn">
+          {activeTab === 'dashboard' && <Dashboard />}
           {activeTab === 'email' && <EmailUpload />}
           {activeTab === 'voice' && <VoiceUpload />}
           {activeTab === 'search' && <AISearch />}

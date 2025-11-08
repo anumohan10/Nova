@@ -83,9 +83,12 @@ john.smith@acme.com
   return (
     <div className="max-w-7xl mx-auto p-6">
       <div className="mb-8">
-        <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-          ✨ Email Auto-Population
-        </h2>
+        <div className="flex items-center gap-3 mb-2">
+          <span className="text-3xl">📧</span>
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            Email Auto-Population
+          </h2>
+        </div>
         <p className="text-gray-600">Paste an email and watch Nova auto-fill your CRM using AI</p>
       </div>
 
@@ -207,7 +210,7 @@ john.smith@acme.com
                       {result.interaction.action_items.map((item, i) => (
                         <li key={i} className="text-sm flex items-start gap-2">
                           <span className="text-indigo-500 font-bold">✓</span>
-                          <span>{item}</span>
+                          <span className="text-gray-700">{item}</span>
                         </li>
                       ))}
                     </ul>
@@ -221,7 +224,7 @@ john.smith@acme.com
                       {result.interaction.next_steps.map((step, i) => (
                         <li key={i} className="text-sm flex items-start gap-2">
                           <span className="text-purple-500 font-bold">→</span>
-                          <span>{step}</span>
+                          <span className="text-gray-700">{step}</span>
                         </li>
                       ))}
                     </ul>
@@ -231,7 +234,7 @@ john.smith@acme.com
                 <div className="flex items-center gap-4 text-sm pt-4 border-t border-indigo-50">
                   <div className="flex items-center gap-2">
                     <span className="text-gray-600 font-medium">Sentiment:</span>
-                    <span className="font-semibold">
+                    <span className="font-semibold text-gray-900">
                       {result.interaction.sentiment === 'positive' && '😊 Positive'}
                       {result.interaction.sentiment === 'neutral' && '😐 Neutral'}
                       {result.interaction.sentiment === 'negative' && '😟 Negative'}
