@@ -1,66 +1,93 @@
-"use client";
-import { useState } from "react";
+'use client';
+
+import { useState } from 'react';
+import LandingPage from '@/components/LandingPage';
+import EmailUpload from '@/components/crm/EmailUpload';
+import VoiceUpload from '@/components/crm/VoiceUpload';
+import AISearch from '@/components/crm/AISearch';
+import Dashboard from '@/components/crm/Dashboard';
+
+type Tab = 'dashboard' | 'email' | 'voice' | 'search';
 
 export default function Home() {
-  const [prompt, setPrompt] = useState("");
-  const [response, setResponse] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [showLanding, setShowLanding] = useState(true);
+  const [activeTab, setActiveTab] = useState<Tab>('dashboard');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setResponse("");
+  // Show landing page first
+  if (showLanding) {
+    return <LandingPage onEnter={() => setShowLanding(false)} />;
+  }
 
-    try {
-      const res = await fetch("/api/test-vertex", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
-      });
-      const data = await res.json();
-
-      // Match the JSON returned from route.ts
-      setResponse(data.output || "No response received.");
-    } catch (err) {
-      console.error(err);
-      setResponse("Error connecting to Vertex AI API.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // Show CRM platform after "Try Nova"
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-zinc-50 dark:bg-black p-8">
-      <div className="max-w-2xl w-full bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-lg">
-        <h1 className="text-2xl font-bold text-center mb-4 text-black dark:text-zinc-50">
-          ✨ Vertex AI Chat ✨
-        </h1>
+    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-100">
+      <div className="container mx-auto py-8 px-4">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-6xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-3">
+            ✨ Nova
+          </h1>
+          <p className="text-xl text-gray-700 mb-2 font-semibold">
+            The Zero-Click CRM Platform
+          </p>
+          <p className="text-sm text-gray-600">
+            Your CRM fills itself from emails, voice, and calls using AI
+          </p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <textarea
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Ask Vertex something..."
-            rows={4}
-            className="border rounded-lg p-3 dark:bg-zinc-800 dark:text-zinc-50"
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-black text-white py-2 px-4 rounded-lg hover:bg-zinc-800 transition"
-          >
-            {loading ? "Thinking..." : "Ask Vertex"}
-          </button>
-        </form>
-
-        {response && (
-          <div className="mt-6 p-4 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
-            <h2 className="font-semibold mb-2 text-black dark:text-zinc-50">Response:</h2>
-            <p className="text-zinc-700 dark:text-zinc-300 whitespace-pre-line">
-              {response}
-            </p>
+        {/* Tab Navigation - 4 Tabs */}
+        <div className="max-w-5xl mx-auto mb-8">
+          <div className="bg-white rounded-xl shadow-lg p-2 grid grid-cols-4 gap-2">
+            <button
+              onClick={() => setActiveTab('dashboard')}
+              className={`py-3 px-4 rounded-lg font-semibold transition-all ${
+                activeTab === 'dashboard'
+                  ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-md'
+                  : 'text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              📊 Insights
+            </button>
+            <button
+              onClick={() => setActiveTab('email')}
+              className={`py-3 px-4 rounded-lg font-semibold transition-all ${
+                activeTab === 'email'
+                  ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-md'
+                  : 'text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              📧 Email
+            </button>
+            <button
+              onClick={() => setActiveTab('voice')}
+              className={`py-3 px-4 rounded-lg font-semibold transition-all ${
+                activeTab === 'voice'
+                  ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-md'
+                  : 'text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              🎤 Voice
+            </button>
+            <button
+              onClick={() => setActiveTab('search')}
+              className={`py-3 px-4 rounded-lg font-semibold transition-all ${
+                activeTab === 'search'
+                  ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-md'
+                  : 'text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              🔍 Search
+            </button>
           </div>
-        )}
+        </div>
+
+        {/* Tab Content */}
+        <div className="animate-fadeIn">
+          {activeTab === 'dashboard' && <Dashboard />}
+          {activeTab === 'email' && <EmailUpload />}
+          {activeTab === 'voice' && <VoiceUpload />}
+          {activeTab === 'search' && <AISearch />}
+        </div>
       </div>
     </main>
   );
