@@ -1,0 +1,67 @@
+# 🧠 Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.egg
+*.egg-info/
+.eggs/
+*.manifest
+*.spec
+*.pytest_cache/
+
+# 🧱 Virtual environments
+.venv/
+venv/
+env/
+ENV/
+*.env
+*.env.local
+
+# 📦 Build & cache
+*.log
+*.lock
+*.pot
+*.mo
+*.sqlite3
+.DS_Store
+.idea/
+.vscode/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.cache/
+dist/
+build/
+
+# 🧰 Node.js / Frontend
+node_modules/
+.next/
+out/
+coverage/
+
+# 🔐 Credentials
+vertex-key.json
+.env
+.env.*
+.env.local
+
+# Ignore virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+vertex-key.json
+.env
+.env.*
+.env.local
+.venv/
+venv/
+ENV/
+node_modules/
+.next/
+dist/
+build/
