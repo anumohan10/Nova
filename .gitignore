@@ -53,3 +53,15 @@ vertex-key.json
 venv/
 env/
 ENV/
+
+vertex-key.json
+.env
+.env.*
+.env.local
+.venv/
+venv/
+ENV/
+node_modules/
+.next/
+dist/
+build/
