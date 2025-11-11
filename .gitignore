@@ -65,3 +65,4 @@ node_modules/
 .next/
 dist/
 build/
+nova-crm-project-*.json
