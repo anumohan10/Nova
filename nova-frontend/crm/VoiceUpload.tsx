@@ -39,38 +39,50 @@ export default function VoiceUpload() {
     }
   };
 
-  const handleExtract = async () => {
-    if (!audioFile) {
-      setError('Please upload an audio file');
-      return;
-    }
+ const handleExtract = async () => {
+  if (!audioFile) {
+    setError('Please upload an audio file');
+    return;
+  }
 
-    setLoading(true);
-    setError('');
-    
-    try {
-      const formData = new FormData();
-      formData.append('audio', audioFile);
+  setLoading(true);
+  setError('');
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/transcribe-audio/`, {
-        method: 'POST',
-        body: formData,
+  try {
+    const formData = new FormData();
+    formData.append('file', audioFile);
+
+    const response = await fetch('http://127.0.0.1:8000/transcribe-audio/', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.success) {
+      setTranscript(data.transcript || '');
+      setResult({
+        contact: { name: '', company: '', email: '', phone: '', role: '' },
+        deal: { stage: '', value: null, products: [] },
+        interaction: {
+          summary: data.summary || 'No summary available',
+          action_items: [],
+          next_steps: [],
+          follow_up_date: '',
+          sentiment: '',
+        }
       });
-
-      const data = await response.json();
-      
-      if (data.success) {
-        setTranscript(data.transcript || '');
-        setResult(data.data);
-      } else {
-        setError(data.error || 'Failed to extract data');
-      }
-    } catch (err) {
-      setError('API not ready yet. Anusree is working on it!');
-    } finally {
-      setLoading(false);
+    } else {
+      setError(data.error || 'Failed to transcribe audio');
     }
-  };
+  } catch (err) {
+    console.error(err);
+    setError('API not responding or backend error');
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const simulateVoiceNote = () => {
     // Simulate what a transcribed voice note would look like
