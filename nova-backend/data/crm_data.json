@@ -1,0 +1,29 @@
+[
+  {
+    "contact_name": "Michael Chen",
+    "company": "TechFlow Inc",
+    "deal_value": 120000,
+    "status": "At Risk",
+    "last_contact_days": 18,
+    "notes": "Needs follow-up. Mentioned interest in CRM automation.",
+    "priority": "Urgent"
+  },
+  {
+    "contact_name": "Lisa Rodriguez",
+    "company": "DataCore Systems",
+    "deal_value": 85000,
+    "status": "In Progress",
+    "last_contact_days": 6,
+    "notes": "Proposal sent, waiting for response.",
+    "priority": "High"
+  },
+  {
+    "contact_name": "Emma Thompson",
+    "company": "Acme Corp",
+    "deal_value": 75000,
+    "status": "Pending",
+    "last_contact_days": 2,
+    "notes": "Scheduled demo next week.",
+    "priority": "Medium"
+  }
+]
