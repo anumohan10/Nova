@@ -39,58 +39,71 @@ export default function VoiceUpload() {
     }
   };
 
- const handleExtract = async () => {
-  if (!audioFile) {
-    setError('Please upload an audio file');
-    return;
-  }
-
-  setLoading(true);
-  setError('');
-
-  try {
-    const formData = new FormData();
-    formData.append('file', audioFile);
-
-    const response = await fetch('http://127.0.0.1:8000/transcribe-audio/', {
-      method: 'POST',
-      body: formData,
-    });
-
-    const data = await response.json();
-
-    if (response.ok && data.success) {
-      setTranscript(data.transcript || '');
-      setResult({
-        contact: { name: '', company: '', email: '', phone: '', role: '' },
-        deal: { stage: '', value: null, products: [] },
-        interaction: {
-          summary: data.summary || 'No summary available',
-          action_items: [],
-          next_steps: [],
-          follow_up_date: '',
-          sentiment: '',
-        }
-      });
-    } else {
-      setError(data.error || 'Failed to transcribe audio');
+  const handleExtract = async () => {
+    if (!audioFile) {
+      setError('Please upload an audio file');
+      return;
     }
-  } catch (err) {
-    console.error(err);
-    setError('API not responding or backend error');
-  } finally {
-    setLoading(false);
-  }
-};
 
+    setLoading(true);
+    setError('');
+
+    try {
+      const formData = new FormData();
+      formData.append('file', audioFile);
+
+      const response = await fetch('http://127.0.0.1:8000/transcribe-audio/', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setTranscript(data.transcript || '');
+
+        // ⚠️ The corrected part: USE CRM DATA SENT BY BACKEND
+        const crm = data.data || {};
+
+        setResult({
+          contact: {
+            name: crm?.contact?.name || '',
+            company: crm?.contact?.company || '',
+            email: crm?.contact?.email || '',
+            phone: crm?.contact?.phone || '',
+            role: crm?.contact?.role || ''
+          },
+          deal: {
+            stage: crm?.deal?.stage || '',
+            value: crm?.deal?.value || null,
+            products: crm?.deal?.products || []
+          },
+          interaction: {
+            summary: crm?.interaction?.summary || 'No summary available',
+            action_items: crm?.interaction?.action_items || [],
+            next_steps: crm?.interaction?.next_steps || [],
+            follow_up_date: crm?.interaction?.follow_up_date || '',
+            sentiment: crm?.interaction?.sentiment || ''
+          }
+        });
+
+      } else {
+        setError(data.error || 'Failed to transcribe audio');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('API not responding or backend error');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const simulateVoiceNote = () => {
-    // Simulate what a transcribed voice note would look like
-    const mockTranscript = "Just had coffee with Sarah from Acme Corp. She's the VP of Sales and they're really interested in our enterprise plan. Looking at around fifty thousand dollars for their team of 75 people. They want to move fast - need a proposal by next Friday and want to schedule a technical demo for their IT team next week. She mentioned they're currently using Salesforce but frustrated with the manual data entry. This could be a really good fit for us.";
-    
+    const mockTranscript =
+      "Just had coffee with Sarah from Acme Corp. She's the VP of Sales and they're really interested in our enterprise plan. Looking at around fifty thousand dollars for their team of 75 people. They want to move fast - need a proposal by next Friday and want to schedule a technical demo for their IT team next week.";
+
     setTranscript(mockTranscript);
-    
-    // Simulate extracted data
+
     setResult({
       contact: {
         name: 'Sarah',
@@ -105,7 +118,8 @@ export default function VoiceUpload() {
         products: ['Enterprise Plan']
       },
       interaction: {
-        summary: 'Coffee meeting discussing enterprise plan adoption. Customer is frustrated with current CRM manual entry.',
+        summary:
+          'Coffee meeting discussing enterprise plan adoption. Customer is frustrated with current CRM manual entry.',
         action_items: [
           'Send proposal by next Friday',
           'Schedule technical demo for IT team',
@@ -130,11 +144,14 @@ export default function VoiceUpload() {
             Voice Note Auto-Population
           </h2>
         </div>
-        <p className="text-gray-600">Upload a voice note and watch Nova transcribe & extract CRM data using AI</p>
+        <p className="text-gray-600">
+          Upload a voice note and watch Nova transcribe & extract CRM data using AI
+        </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Left Side - Input */}
+
+        {/* LEFT SIDE */}
         <div className="space-y-4">
           <div className="flex justify-between items-center">
             <label className="block text-sm font-semibold text-gray-700">
@@ -148,7 +165,7 @@ export default function VoiceUpload() {
             </button>
           </div>
 
-          {/* File Upload Area */}
+          {/* UPLOAD AREA */}
           <div className="border-2 border-dashed border-indigo-200 rounded-xl p-8 text-center bg-white hover:border-indigo-300 transition-colors">
             <input
               type="file"
@@ -159,17 +176,24 @@ export default function VoiceUpload() {
             />
             <label htmlFor="audio-upload" className="cursor-pointer">
               <div className="flex flex-col items-center">
-                <svg className="w-16 h-16 text-indigo-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                <svg
+                  className="w-16 h-16 text-indigo-400 mb-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
+                  />
                 </svg>
+
                 {audioFile ? (
                   <div>
-                    <p className="text-sm font-medium text-gray-700 mb-1">
-                      ✓ {audioFile.name}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      Click to change file
-                    </p>
+                    <p className="text-sm font-medium text-gray-700 mb-1">✓ {audioFile.name}</p>
+                    <p className="text-xs text-gray-500">Click to change file</p>
                   </div>
                 ) : (
                   <div>
@@ -185,14 +209,15 @@ export default function VoiceUpload() {
             </label>
           </div>
 
-          {/* Transcript Display */}
+          {/* TRANSCRIPT */}
           {transcript && (
             <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4">
               <h3 className="text-sm font-semibold text-indigo-900 mb-2">📝 Transcript:</h3>
               <p className="text-sm text-gray-700 leading-relaxed">{transcript}</p>
             </div>
           )}
-          
+
+          {/* BUTTON */}
           <button
             onClick={handleExtract}
             disabled={loading || !audioFile}
@@ -201,8 +226,20 @@ export default function VoiceUpload() {
             {loading ? (
               <span className="flex items-center justify-center gap-2">
                 <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  />
                 </svg>
                 Transcribing & Extracting...
               </span>
@@ -218,7 +255,7 @@ export default function VoiceUpload() {
           )}
         </div>
 
-        {/* Right Side - Results */}
+        {/* RIGHT SIDE – Results */}
         <div className="space-y-4">
           <label className="block text-sm font-semibold text-gray-700">
             ✅ Extracted CRM Data
@@ -226,25 +263,37 @@ export default function VoiceUpload() {
 
           {result ? (
             <div className="space-y-4 animate-fadeIn">
-              {/* Contact Card */}
+
+              {/* CONTACT CARD */}
               <div className="bg-white border-2 border-indigo-100 rounded-xl p-6 shadow-lg hover:shadow-xl hover:border-indigo-200 transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <h3 className="text-2xl font-bold text-gray-900">
                       {result.contact.name || 'No name found'}
                     </h3>
-                    <p className="text-lg text-gray-600">{result.contact.company || 'No company'}</p>
+                    <p className="text-lg text-gray-600">
+                      {result.contact.company || 'No company'}
+                    </p>
+
                     {result.contact.role && (
-                      <p className="text-sm text-indigo-600 font-medium mt-1">{result.contact.role}</p>
+                      <p className="text-sm text-indigo-600 font-medium mt-1">
+                        {result.contact.role}
+                      </p>
                     )}
                   </div>
+
                   <div className="text-right">
-                    <span className={`inline-block px-4 py-2 rounded-full text-sm font-bold ${
-                      result.deal.stage === 'negotiation' ? 'bg-amber-100 text-amber-800' :
-                      result.deal.stage === 'qualified' ? 'bg-emerald-100 text-emerald-800' :
-                      result.deal.stage === 'prospect' ? 'bg-blue-100 text-blue-800' :
-                      'bg-gray-100 text-gray-800'
-                    }`}>
+                    <span
+                      className={`inline-block px-4 py-2 rounded-full text-sm font-bold ${
+                        result.deal.stage === 'negotiation'
+                          ? 'bg-amber-100 text-amber-800'
+                          : result.deal.stage === 'qualified'
+                          ? 'bg-emerald-100 text-emerald-800'
+                          : result.deal.stage === 'prospect'
+                          ? 'bg-blue-100 text-blue-800'
+                          : 'bg-gray-100 text-gray-800'
+                      }`}
+                    >
                       {result.deal.stage}
                     </span>
                   </div>
@@ -257,12 +306,14 @@ export default function VoiceUpload() {
                       <span className="text-gray-700">{result.contact.email}</span>
                     </div>
                   )}
+
                   {result.contact.phone && (
                     <div className="flex items-center gap-2">
                       <span className="text-indigo-500">📞</span>
                       <span className="text-gray-700">{result.contact.phone}</span>
                     </div>
                   )}
+
                   {result.deal.value && (
                     <div className="flex items-center gap-2">
                       <span className="text-indigo-500">💰</span>
@@ -274,16 +325,20 @@ export default function VoiceUpload() {
                 </div>
               </div>
 
-              {/* Interaction Details */}
+              {/* INTERACTION SUMMARY */}
               <div className="bg-white border-2 border-indigo-100 rounded-xl p-6 shadow-lg hover:shadow-xl hover:border-indigo-200 transition-all">
                 <h4 className="font-bold text-lg mb-3 text-indigo-700">📝 Interaction Summary</h4>
+
                 <p className="text-sm text-gray-700 mb-4 leading-relaxed">
                   {result.interaction.summary || 'No summary available'}
                 </p>
 
+                {/* ACTION ITEMS */}
                 {result.interaction.action_items.length > 0 && (
                   <div className="mb-4">
-                    <h5 className="font-semibold text-sm mb-2 text-gray-800">Action Items:</h5>
+                    <h5 className="font-semibold text-sm mb-2 text-gray-800">
+                      Action Items:
+                    </h5>
                     <ul className="space-y-2">
                       {result.interaction.action_items.map((item, i) => (
                         <li key={i} className="text-sm flex items-start gap-2">
@@ -295,6 +350,7 @@ export default function VoiceUpload() {
                   </div>
                 )}
 
+                {/* NEXT STEPS */}
                 {result.interaction.next_steps.length > 0 && (
                   <div className="mb-4">
                     <h5 className="font-semibold text-sm mb-2 text-gray-800">Next Steps:</h5>
@@ -309,6 +365,7 @@ export default function VoiceUpload() {
                   </div>
                 )}
 
+                {/* FOOTER ROW */}
                 <div className="flex items-center gap-4 text-sm pt-4 border-t border-indigo-50">
                   <div className="flex items-center gap-2">
                     <span className="text-gray-600 font-medium">Sentiment:</span>
@@ -318,10 +375,13 @@ export default function VoiceUpload() {
                       {result.interaction.sentiment === 'negative' && '😟 Negative'}
                     </span>
                   </div>
+
                   {result.interaction.follow_up_date && (
                     <div className="flex items-center gap-2">
                       <span className="text-gray-600 font-medium">Follow up:</span>
-                      <span className="font-semibold text-indigo-600">{result.interaction.follow_up_date}</span>
+                      <span className="font-semibold text-indigo-600">
+                        {result.interaction.follow_up_date}
+                      </span>
                     </div>
                   )}
                 </div>
@@ -330,11 +390,25 @@ export default function VoiceUpload() {
           ) : (
             <div className="h-96 border-2 border-dashed border-indigo-200 rounded-xl flex items-center justify-center text-gray-400 bg-indigo-50/30">
               <div className="text-center">
-                <svg className="mx-auto h-16 w-16 text-indigo-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                <svg
+                  className="mx-auto h-16 w-16 text-indigo-300 mb-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
+                  />
                 </svg>
-                <p className="text-lg font-medium text-gray-500">Extracted data will appear here</p>
-                <p className="text-sm mt-1 text-gray-400">Try the demo voice note to see it in action</p>
+                <p className="text-lg font-medium text-gray-500">
+                  Extracted data will appear here
+                </p>
+                <p className="text-sm mt-1 text-gray-400">
+                  Try the demo voice note to see it in action
+                </p>
               </div>
             </div>
           )}
