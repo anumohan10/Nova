@@ -1,0 +1,17 @@
+fastapi
+uvicorn[standard]
+
+python-dotenv
+
+google-cloud-speech
+google-cloud-bigquery
+google-cloud-storage
+google-auth
+
+vertexai
+google-cloud-aiplatform
+
+pydantic
+requests
+pydub
+fastapi[all]

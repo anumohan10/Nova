@@ -9,7 +9,7 @@ import tempfile
 import json
 
 # Vertex AI
-from vertexai.preview.generative_models import GenerativeModel
+from vertexai.generative_models import GenerativeModel
 import vertexai
 
 # --- Load env ---
