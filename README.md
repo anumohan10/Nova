@@ -132,8 +132,8 @@ Nova is built as a **cloud-native, multi-agent AI system**.
 
 ## 👩‍💻 Authors
 
-Anusree Mohanan - MS in Information Systems -- Northeastern University
-Tanvi Kadam - MS in Applied Machine Learning -- Northeastern University
+- Anusree Mohanan - MS in Information Systems -- Northeastern University
+- Tanvi Kadam - MS in Applied Machine Learning -- Northeastern University
 
 ---
 
